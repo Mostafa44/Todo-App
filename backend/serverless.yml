@@ -5,12 +5,15 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
 
+package:
+  individually: true
+  
 provider:
   name: aws
   runtime: nodejs8.10
 
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
+  region: ${opt:region, 'eu-west-3'}
 
 functions:
 
