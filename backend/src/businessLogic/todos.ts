@@ -2,7 +2,7 @@ import * as uuid from 'uuid'
 
 import { TodoItem } from '../models/TodoItem'
 import { TodoItemAccess } from '../dataLayer/todosAccess'
-import { CreateTodoItemRequest } from '../requests/CreateTodoItemRequest'
+import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { parseUserId } from '../auth/utils'
 
 const todoAccess = new TodoItemAccess()
@@ -12,7 +12,7 @@ export async function getAllTodoItems(): Promise<TodoItem[]> {
 }
 
 export async function createTodoItem(
-    createTodoItemRequest: CreateTodoItemRequest,
+    createTodoItemRequest: CreateTodoRequest,
     jwtToken: string
 ): Promise<TodoItem> {
 
