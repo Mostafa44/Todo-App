@@ -20,12 +20,12 @@ export async function createTodoItem(
     const userId = parseUserId(jwtToken)
 
     return await todoAccess.createTodoItem({
-        todoId: itemId,
+        id: itemId,
         userId: userId,
         name: createTodoItemRequest.name,
         dueDate: createTodoItemRequest.dueDate,
         done: false,
         createdAt: new Date().toISOString(),
-        attachmentUrl: createTodoItemRequest.attachmentUrl ?? null
+        attachmentUrl: createTodoItemRequest.attachmentUrl
     })
 }
