@@ -7,6 +7,7 @@ const XAWS = AWSXRay.captureAWS(AWS) // debug tool to keep track of user request
 //const XAWS = AWS // debug tool to keep track of user requests
 
 import { TodoItem } from '../models/TodoItem'
+//import { throws } from 'assert';
 
 export class TodoItemAccess {
 
@@ -33,6 +34,17 @@ export class TodoItemAccess {
         }).promise()
 
         return todo
+    }
+    async deleteTodoItem(todoItemId: string, userId: string): Promise<TodoItem> {
+        const itemToBeDeleted = await this.docClient.delete({
+            TableName: this.todosTable,
+            Key: {
+                id: todoItemId,
+                userId: userId
+            },
+            ReturnValues: 'ALL_OLD'
+        }).promise();
+        return itemToBeDeleted.Attributes as TodoItem;
     }
 }
 

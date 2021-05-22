@@ -29,3 +29,7 @@ export async function createTodoItem(
         attachmentUrl: createTodoItemRequest.attachmentUrl
     })
 }
+export async function deleteTodoItem(todoItemId: string, jwtToken: string): Promise<TodoItem> {
+    const userId = parseUserId(jwtToken);
+    return await todoAccess.deleteTodoItem(todoItemId, userId)
+}
