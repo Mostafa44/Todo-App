@@ -7,8 +7,9 @@ import { parseUserId } from '../auth/utils'
 
 const todoAccess = new TodoItemAccess()
 
-export async function getAllTodoItems(): Promise<TodoItem[]> {
-    return todoAccess.getAllTodoItems()
+export async function getAllTodoItems(jwtToken: string): Promise<TodoItem[]> {
+    const userId = parseUserId(jwtToken);
+    return todoAccess.getAllTodoItems(userId)
 }
 
 export async function createTodoItem(

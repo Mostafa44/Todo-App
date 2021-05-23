@@ -16,12 +16,19 @@ export class TodoItemAccess {
         private readonly todosTable = process.env.TODOS_TABLE) {
     }
 
-    async getAllTodoItems(): Promise<TodoItem[]> {
+    async getAllTodoItems(userId: string): Promise<TodoItem[]> {
         logger.info('Getting all todos')
-
-        const result = await this.docClient.scan({
-            TableName: this.todosTable
-        }).promise()
+        const params = {
+            TableName: this.todosTable,
+            FilterExpression: "#userId = :userId",
+            ExpressionAttributeNames: {
+                "#userId": "userId",
+            },
+            ExpressionAttributeValues: {
+                ':userId': userId,
+            }
+        };
+        const result = await this.docClient.scan(params).promise()
 
         const items = result.Items
         return items as TodoItem[]
@@ -46,6 +53,7 @@ export class TodoItemAccess {
         }).promise();
         return itemToBeDeleted.Attributes as TodoItem;
     }
+
 }
 
 function createDynamoDBClient() {
