@@ -73,7 +73,6 @@ functions:
           - dynamodb:GetItem
           - dynamodb:Scan
           - dynamodb:PutItem
-          - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
