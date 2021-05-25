@@ -14,20 +14,21 @@ export async function getTodos(idToken: string): Promise<Todo[]> {
     },
   })
   console.log('Todos:', response.data)
-  return response.data.items
+  console.log(response.data.todos);
+  return response.data.todos
 }
 
 export async function createTodo(
   idToken: string,
   newTodo: CreateTodoRequest
 ): Promise<Todo> {
-  const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newTodo), {
+  const response = await Axios.post(`${apiEndpoint}/todos`, JSON.stringify(newTodo), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
     }
   })
-  return response.data.item
+  return response.data.newItem
 }
 
 export async function patchTodo(
@@ -35,7 +36,7 @@ export async function patchTodo(
   todoId: string,
   updatedTodo: UpdateTodoRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
+  await Axios.put(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
