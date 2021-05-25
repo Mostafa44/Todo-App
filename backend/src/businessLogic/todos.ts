@@ -1,3 +1,4 @@
+import { UpdateTodoRequest } from './../../../client/src/types/UpdateTodoRequest';
 import * as uuid from 'uuid'
 
 import { TodoItem } from '../models/TodoItem'
@@ -28,6 +29,18 @@ export async function createTodoItem(
         done: false,
         createdAt: new Date().toISOString(),
         attachmentUrl: createTodoItemRequest.attachmentUrl
+    })
+}
+export async function updateTodoItem(
+    updateTodoRequest: UpdateTodoRequest,
+    todoItemId: string,
+    jwtToken: string
+): Promise<TodoItem> {
+    const userId = parseUserId(jwtToken);
+    return await todoAccess.updateTodo(todoItemId, userId, {
+        name: updateTodoRequest.name,
+        dueDate: updateTodoRequest.dueDate,
+        done: updateTodoRequest.done
     })
 }
 export async function deleteTodoItem(todoItemId: string, jwtToken: string): Promise<TodoItem> {
