@@ -15,13 +15,16 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-3'}
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     USER_ID_INDEX: UserIdIndex
     IMAGES_S3_BUCKET: mostafa-449-118-serverless-todo-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    AUTH_0_SECRET_ID: Auth0Secret-todo-${self:provider.stage}
-    AUTH_0_SECRET_FIELD: auth0Secret
+    JWKS_URL: https://dev-o3mdmxx4.us.auth0.com/.well-known/jwks.json
 
 functions:
 
