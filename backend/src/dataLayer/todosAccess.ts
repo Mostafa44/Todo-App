@@ -14,7 +14,7 @@ export class TodoItemAccess {
 
     constructor(
         private readonly docClient: DocumentClient = createDynamoDBClient(),
-        private readonly todosTable = process.env.TODOS_TABLE) {
+        private readonly todosTable = process.env.TODOS_TABLE,) {
     }
 
     async getAllTodoItems(userId: string): Promise<TodoItem[]> {
@@ -87,6 +87,35 @@ export class TodoItemAccess {
         }).promise();
         return itemToBeDeleted.Attributes as TodoItem;
     }
+    async isTodoExist(todoId: string): Promise<TodoItem> {
+        console.log("just before searching for the todo item")
+        const result = await this.docClient
+            .get({
+                TableName: this.todosTable,
+                Key: {
+                    id: todoId
+                }
+            })
+            .promise()
+        return result.Item as TodoItem;
+    }
+    async addAttachment(todoId: string,
+        userId: string, imageUrl: string) {
+        const params = {
+            TableName: this.todosTable,
+            Key: {
+                id: todoId,
+                userId: userId
+            },
+            UpdateExpression: 'set #attachmentUrl = :attachmentUrl',
+            ExpressionAttributeNames: { '#attachmentUrl': 'attachmentUrl' },
+            ExpressionAttributeValues: { ':attachmentUrl': imageUrl, },
+            ReturnValues: 'ALL_NEW'
+        };
+
+        const result = await this.docClient.update(params).promise();
+        return result.Attributes as TodoItem;
+    }
 
 }
 
@@ -101,3 +130,4 @@ function createDynamoDBClient() {
 
     return new XAWS.DynamoDB.DocumentClient()
 }
+
