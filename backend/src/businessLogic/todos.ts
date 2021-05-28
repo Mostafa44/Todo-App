@@ -1,3 +1,4 @@
+import { BucketAccess } from './../dataLayer/bucketAccess';
 import { UpdateTodoRequest } from './../../../client/src/types/UpdateTodoRequest';
 import * as uuid from 'uuid'
 
@@ -6,7 +7,8 @@ import { TodoItemAccess } from '../dataLayer/todosAccess'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { parseUserId } from '../auth/utils'
 
-const todoAccess = new TodoItemAccess()
+const todoAccess = new TodoItemAccess();
+const bucketAccess = new BucketAccess();
 
 export async function getAllTodoItems(jwtToken: string): Promise<TodoItem[]> {
     const userId = parseUserId(jwtToken);
@@ -46,4 +48,18 @@ export async function updateTodoItem(
 export async function deleteTodoItem(todoItemId: string, jwtToken: string): Promise<TodoItem> {
     const userId = parseUserId(jwtToken);
     return await todoAccess.deleteTodoItem(todoItemId, userId)
+}
+export async function todoExists(todoId: string): Promise<boolean> {
+    const result = await todoAccess.isTodoExist(todoId);
+    return !!result
+}
+export async function addImageAttachment(todoId: string, jwtToken: string): Promise<any> {
+    const imageId = uuid.v4();
+    const imageUrl = bucketAccess.getImageUrl(imageId);
+    const userId = parseUserId(jwtToken);
+    const newItem = await todoAccess.addAttachment(todoId, userId, imageUrl);
+    const uploadUrl = bucketAccess.getPreSignedUrl(imageId);
+    return {
+        newItem, uploadUrl
+    };
 }
