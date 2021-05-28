@@ -24,5 +24,4 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       newItem
     })
   }
-  return undefined
 }
