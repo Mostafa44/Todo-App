@@ -72,6 +72,7 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:GetItem
